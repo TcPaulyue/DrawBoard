@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: C:\Users\汤聪\Desktop\DrawBoard\src\DrawTest.java
+Main-Class: DrawTest
+

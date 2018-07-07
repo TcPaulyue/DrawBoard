@@ -9,7 +9,6 @@ public class SaveRead {
     public static void Save(ArrayList<MyShape> a) throws IOException {
         FileOutputStream file = new FileOutputStream("ShapeList");
         ObjectOutputStream outObj = new ObjectOutputStream(file);
-
         outObj.writeObject(a);
         outObj.close();
     }

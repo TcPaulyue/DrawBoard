@@ -26,6 +26,7 @@ public class DrawTest {
                 drawFrame.setTitle("DrawBoard");
                 drawFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 drawFrame.setVisible(true);
+                System.out.println(drawFrame.getBackground());
             }
         });
         /*

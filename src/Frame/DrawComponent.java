@@ -22,16 +22,26 @@ public class DrawComponent extends JComponent {
      */
     private static final int DEFAULT_WIDTH = 1200;
     private static final int DEFAULT_HEIGHT = 650;
-
+    private DrawFrame drawFrame;
     private ArrayList<MyShape> shapes;
+    private ArrayList<JTextArea> jTextAreas;
+    private JTextArea jTextArea;
     private MyShape drawingShape;
+    public MyShape copyShape;
     private MyShape currentShape = null;
-    private MyPainter painter;
+    private MyPainter painter=new MyLinePainter();
     private Point2D[] movePoint = new Point2D[2];
-
-    public DrawComponent() {
+    private String state=new String("null");
+    private Point2D point;
+    private EditPanel editPanel;
+    public void setState(String s)
+    {
+        state=new String(s);
+    }
+    public DrawComponent(DrawFrame f) {
+        drawFrame=f;
         shapes = new ArrayList<>();
-
+        jTextAreas=new ArrayList<>();
         try {
             shapes = SaveRead.Read();
         } catch (EOFException e) {
@@ -44,7 +54,7 @@ public class DrawComponent extends JComponent {
             e.printStackTrace();
         }
 
-        addMouseListener(new MouseHandler());
+        addMouseListener(new MouseHandler(this));
         addMouseMotionListener(new MouseMotionHandler());
         /*
          *另一种方法是让DrawComponent实现接口MouseListener和MouseMotionListener,
@@ -57,18 +67,26 @@ public class DrawComponent extends JComponent {
         return shapes;
     }
 
+    public ArrayList<JTextArea> getjTextAreas() {
+        return jTextAreas;
+    }
+
     public void setPainter(String shapeName) {
-        String painterName = "Painter." + shapeName + "Painter";
+        String painterName = "Painter.My" + shapeName + "Painter";
         painter = PainterFactory.createPainterInstance(painterName);
     }
 
     @Override
     public void paintComponent(Graphics g) {
         for (MyShape s : shapes) {
+            System.out.println(s.getClassName()+" ");
             s.draw(g);
+           // System.out.println(s.jTextArea.getBounds().x);
+            this.add(s.jTextArea);
+            jTextAreas.add(s.jTextArea);
         }
+        System.out.println("\n");
     }
-
     void clear() {
         shapes.clear();
         repaint();//转向调用paintComponent()
@@ -88,20 +106,74 @@ public class DrawComponent extends JComponent {
     }
 
     private class MouseHandler extends MouseAdapter {
+        public DrawComponent drawComponent;
+        public MouseHandler(DrawComponent d) {
+            drawComponent=d;
+        }
+        @Override
+        public void mouseClicked(MouseEvent e)
+        {
+            if(e.getButton()==MouseEvent.BUTTON3){
+                System.out.println("!!!!!!!!!!!!!!!!");
+                currentShape = find(e.getPoint());
+                editPanel=new EditPanel(e.getX(),e.getY());
+                String s1=editPanel.textField1.getText();
+                String s2=editPanel.textField2.getText();
+                repaint();
+            }
+            System.out.println(state);
+            if(state.compareTo("copy")==0) {
+                copyShape = find(e.getPoint());
+                //MyPainter temp = PainterFactory.createPainterInstance(copyShape.getClassName());
+
+                point=e.getPoint();
+                state=new String("null");
+                System.out.println("copy---------");
+            }
+            else if(state.compareTo("paste")==0)// if(this.drawComponent.drawFrame.menuPanel.myActionListener.getMyShape()!=null)
+            {
+               // currentShape=this.drawComponent.drawFrame.menuPanel.myActionListener.getMyShape();
+                //currentShape.move(point,e.getPoint());
+                shapes.add(copyShape.copy());
+                MyShape pasteShape=shapes.get(shapes.size()-1);
+                pasteShape.move(point,e.getPoint());
+                repaint();
+                point=e.getPoint();
+                state=new String("null");
+                System.out.println("paste---------");
+            }
+        }
         @Override
         public void mousePressed(MouseEvent e) {
+            System.out.println("press----------");
+            if(state.compareTo("copy")==0||state.compareTo("paste")==0)
+                return;
             currentShape = find(e.getPoint());
+/*            if(this.drawComponent.drawFrame.menuPanel.myActionListener.shape.equals("TextField"))
+            {
+                jTextArea=new JTextArea();
+                jTextArea.setBounds(e.getX(),e.getY(),100,40);
+                jTextArea.setBackground(this.drawComponent.drawFrame.menuPanel.myActionListener.color);
+                jTextArea.setVisible(true);
+                this.drawComponent.add(jTextArea);
+                jTextAreas.add(jTextArea);
+                repaint();
+                return;
+            }*/
             if (currentShape == null) {
-                drawingShape = painter.mousePressed(e);// 返回一个MyShape子类对象
-                if (drawingShape != null)
+               String shape=this.drawComponent.drawFrame.menuPanel.myActionListener.shape;
+                setPainter(shape);
+                drawingShape = painter.mousePressed(e,this.drawComponent.drawFrame.menuPanel.myActionListener);// 返回一个MyShape子类对象
+                if (drawingShape != null){
                     shapes.add(drawingShape);
+                }
                     /*
                      *将绘制出的对象添加到ArrayList中,调用repaint()时将转向调用
                      *paintComponent(),以此实现drawingShape的重绘.
                      */
                 repaint();
             } else {
-                setPainter(currentShape.getClassName());
+                setPainter(currentShape.getClassName().toString());
                 movePoint[0] = e.getPoint();
             }
             /*

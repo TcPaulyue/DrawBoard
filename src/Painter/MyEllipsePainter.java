@@ -1,5 +1,6 @@
 package Painter;
 
+import Frame.MyActionListener;
 import Shapes.MyEllipse;
 import Shapes.MyShape;
 import util.Dragger;
@@ -10,9 +11,11 @@ public class MyEllipsePainter extends MyPainter {
     private MyEllipse drawingShape;
 
     @Override
-    public MyShape mousePressed(MouseEvent e) {
+    public MyShape mousePressed(MouseEvent e, MyActionListener myActionListener) {
         points.add(e.getPoint());
-        drawingShape = new MyRectangle();
+        drawingShape = new MyEllipse();
+        drawingShape.color=myActionListener.color;
+        drawingShape.shape=myActionListener.shape;
         return drawingShape;
     }
 

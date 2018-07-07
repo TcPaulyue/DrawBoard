@@ -28,7 +28,15 @@ public class MyPolygon extends MyShape implements Serializable{
         points = new Vector<>(p);
         // 调用Vector(Collection<? extends E> c)构造函数
     }
+    public MyShape copy()
+    {
+        MyPolygon temp = new MyPolygon();
 
+//        temp.points[0]=this.points[0];
+//        temp.points[1]=this.points[1];
+//        temp.init();
+        return temp;
+    }
     @Override
     public boolean contains(Point2D p) {
         return polygon.contains(p);
@@ -65,5 +73,7 @@ public class MyPolygon extends MyShape implements Serializable{
             y[i] = (int) points.get(i).getY();
         }
         polygon = new Polygon(x, y, n);
+        jTextArea.setBackground(this.color);
+        jTextArea.setVisible(true);
     }
 }

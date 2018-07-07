@@ -1,5 +1,6 @@
 package Painter;
 
+import Frame.MyActionListener;
 import Shapes.MyPolygon;
 import Shapes.MyShape;
 
@@ -11,7 +12,7 @@ public class MyPolygonPainter extends MyPainter {
     private MyPolygon drawingShape = null;
 
     @Override
-    public MyShape mousePressed(MouseEvent e) {
+    public MyShape mousePressed(MouseEvent e, MyActionListener myActionListener) {
         if (e.getButton() == MouseEvent.BUTTON1) {
             // 左键
             points.add(e.getPoint());

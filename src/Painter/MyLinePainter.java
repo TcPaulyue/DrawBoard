@@ -1,5 +1,6 @@
 package Painter;
 
+import Frame.MyActionListener;
 import Shapes.MyLine;
 import Shapes.MyShape;
 import util.Dragger;
@@ -10,9 +11,11 @@ public class MyLinePainter extends MyPainter {
     private MyLine drawingShape;
 
     @Override
-    public MyShape mousePressed(MouseEvent e) {
+    public MyShape mousePressed(MouseEvent e, MyActionListener myActionListener) {
         points.add(e.getPoint());
         drawingShape = new MyLine();
+        drawingShape.color=myActionListener.color;
+        drawingShape.shape=myActionListener.shape;
         return drawingShape;
     }
 

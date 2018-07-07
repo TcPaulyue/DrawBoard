@@ -50,6 +50,7 @@ public class MyLine extends MyShape implements Serializable {
     public void draw(Graphics g) {
         Graphics2D graphics2D = (Graphics2D) g;
         graphics2D.setStroke(pen);
+        graphics2D.setColor(color);
         graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
         graphics2D.draw(line2D);
@@ -63,7 +64,14 @@ public class MyLine extends MyShape implements Serializable {
          *把条件改为:只要点击位置离直线距离在2个像素内就行了.
          */
     }
-
+    public MyShape copy() {
+        MyLine temp = new MyLine();
+        temp.points[0]=new Point2D.Double(this.points[0].getX(),this.points[0].getY());
+        temp.points[1]=new Point2D.Double(this.points[1].getX(),this.points[1].getY());
+        temp.init();
+        return temp;
+        //temp.setPoints(this.points);
+    }
     @Override
     public void move(Point2D p1, Point2D p2) {
         Mover.move(p1, p2, points);

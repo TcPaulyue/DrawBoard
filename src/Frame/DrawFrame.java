@@ -11,7 +11,8 @@ import Factory.ShapeFactory;
 import SaveRead.*;
 
 public class DrawFrame extends JFrame implements ActionListener {
-    private DrawComponent drawComponent;
+    public DrawComponent drawComponent;
+    public MenuPanel menuPanel;
     private static final int DEFAULT_WIDTH = 1200;
     private static final int DEFAULT_HEIGHT = 700;
     private ArrayList<String> classNamesOfShapes = ButtonFactory.getClassNamesOfShapes();
@@ -20,7 +21,11 @@ public class DrawFrame extends JFrame implements ActionListener {
     public DrawFrame() {
         setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
-        drawComponent = new DrawComponent();
+        drawComponent = new DrawComponent(this);
+        drawComponent.setBackground(Color.GRAY);
+        menuPanel=new MenuPanel(this);
+        setJMenuBar(menuPanel);
+        setContentPane(drawComponent);
         JPanel buttonPanel = new JPanel();
 
         for (String className : classNamesOfShapes) {
@@ -42,7 +47,7 @@ public class DrawFrame extends JFrame implements ActionListener {
         //addButton(buttonPanel, "Clear", e -> drawComponent.clear());
 
         add(buttonPanel, BorderLayout.NORTH);
-        add(drawComponent, BorderLayout.CENTER);
+        //add(drawComponent, BorderLayout.CENTER);
         pack();
     }
 

@@ -7,7 +7,7 @@ public class ButtonFactory {
     //getClassNamesOfShapes()和类名BUttonFactory有关系吗
     public static ArrayList<String> getClassNamesOfShapes() {
         ArrayList<String> classNames = new ArrayList<>();
-        File dir = new File("C:\\Users\\len\\Desktop\\Program\\IntelliJ Projects\\src\\Shapes");
+        File dir = new File("C:\\Users\\汤聪\\Desktop\\DrawBoard\\src\\Shapes");
         File[] files = dir.listFiles();
 
         for (File file : files) {

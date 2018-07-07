@@ -1,5 +1,6 @@
 package Painter;
 
+import Frame.MyActionListener;
 import Shapes.MyRectangle;
 import Shapes.MyShape;
 import util.Dragger;
@@ -10,9 +11,11 @@ public class MyRectanglePainter extends MyPainter {
     private MyRectangle drawingShape;
 
     @Override
-    public MyShape mousePressed(MouseEvent e) {
+    public MyShape mousePressed(MouseEvent e, MyActionListener m) {
         points.add(e.getPoint());
         drawingShape = new MyRectangle();
+        drawingShape.color=m.color;
+        drawingShape.shape=m.shape;
         return drawingShape;
     }
 
